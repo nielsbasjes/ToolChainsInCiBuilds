@@ -85,16 +85,26 @@ jobs:
     - name: Verify setup
       shell: bash
       run: |
-        cat $HOME/.m2/toolchains.xml;
+        echo "======================================";\
+        echo "Default Java"; \
+        java -version ; \
+        javac -version ; \
+        echo JAVA_HOME=${JAVA_HOME} ; \
+        echo "======================================";\
         echo "Java 8"; \
         ${{ env.JAVA_8 }}/bin/java -version ; \
         ${{ env.JAVA_8 }}/bin/javac -version ; \
+        echo "======================================";\
         echo "Java 11"; \
         ${{ env.JAVA_11 }}/bin/java -version ; \
         ${{ env.JAVA_11 }}/bin/javac -version ; \
+        echo "======================================";\
         echo "Java 17"; \
         ${{ env.JAVA_17 }}/bin/java -version ; \
         ${{ env.JAVA_17 }}/bin/javac -version ; \
+        echo "======================================";\
+        cat $HOME/.m2/toolchains.xml; \
+        echo "======================================";
 
     - name: Build Yauaa
       run: mvn clean package
