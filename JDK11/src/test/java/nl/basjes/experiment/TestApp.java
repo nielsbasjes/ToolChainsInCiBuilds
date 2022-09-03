@@ -11,4 +11,9 @@ class TestApp {
         assertEquals("Hello", new App().doSomething());
     }
 
+    @Test
+    void showVersion() {
+        System.out.println("Java version during testing: " + System.getProperty("java.version"));
+    }
+
 }
