@@ -111,5 +111,5 @@ jobs:
         cat $HOME/.m2/toolchains.xml; \
         echo "======================================";
 
-    - name: Build Yauaa
+    - name: Build the project
       run: mvn clean package
