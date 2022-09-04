@@ -112,4 +112,4 @@ jobs:
         echo "======================================";
 
     - name: Build the project
-      run: mvn clean package
+      run: mvn clean verify

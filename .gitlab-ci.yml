@@ -1,0 +1,14 @@
+image: maven:3.8.6-eclipse-temurin-17-focal
+
+stages:
+  - build
+
+maven-build:
+  stage: build
+  script:
+    - apt-get update && apt-get install -y openjdk-8-jdk openjdk-11-jdk openjdk-17-jdk
+    - mkdir -p ~/.m2 && cp toolchains.xml ~/.m2/
+    - ls -laF
+    - ls -laF ~
+    - ls -laF ${HOME}
+    - mvn clean verify
