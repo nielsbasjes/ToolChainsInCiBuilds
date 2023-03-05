@@ -1,83 +1,118 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns="http://maven.apache.org/POM/4.0.0"
-        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-    <groupId>nl.basjes.experiment</groupId>
-    <artifactId>toolchaintester-parent</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+  <groupId>nl.basjes.experiment</groupId>
+  <artifactId>toolchaintester-parent</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
 
-    <name>Testing Toolchains:</name>
+  <name>Testing Toolchains:</name>
 
-    <packaging>pom</packaging>
+  <packaging>pom</packaging>
 
-    <properties>
-        <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-        <maven.compiler.release>8</maven.compiler.release>
-    </properties>
+  <properties>
+    <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>8</maven.compiler.source>
+    <maven.compiler.target>8</maven.compiler.target>
+    <maven.compiler.release>8</maven.compiler.release>
+    <project.build.outputTimestamp>2001-02-03T04:05:06+07:00</project.build.outputTimestamp>
+  </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.9.0</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+  <dependencies>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>5.9.2</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
+  <build>
+    <pluginManagement>
+      <plugins>
 
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>exec-maven-plugin</artifactId>
-                    <version>3.1.0</version>
-                    <executions>
-                        <execution>
-                            <id>Display class versions</id>
-                            <phase>prepare-package</phase>
-                            <goals>
-                                <goal>exec</goal>
-                            </goals>
-                            <configuration>
-                                <executable>bash</executable>
-                                <arguments>
-                                    <argument>-c</argument>
-                                    <argument>
-                                        echo "Version 52 = Java 8, Version 55 = Java 11, Version 61 = Java 17";
-                                        echo "Code: $(javap -v ./target/classes/nl/basjes/experiment/App.class | fgrep major)" ;
-                                        echo "Test: $(javap -v ./target/test-classes/nl/basjes/experiment/TestApp.class | fgrep major)";
-                                    </argument>
-                                </arguments>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>3.1.0</version>
+          <executions>
+            <execution>
+              <id>Display class versions</id>
+              <phase>prepare-package</phase>
+              <goals>
+                <goal>exec</goal>
+              </goals>
+              <configuration>
+                <executable>bash</executable>
+                <arguments>
+                  <argument>-c</argument>
+                  <argument>
+                    echo "Version 52 = Java 8, Version 55 = Java 11, Version 61 = Java 17";
+                    echo "Code: $(javap -v ./target/classes/nl/basjes/experiment/App.class | fgrep major)" ;
+                    echo "Test: $(javap -v ./target/test-classes/nl/basjes/experiment/TestApp.class | fgrep major)";
+                  </argument>
+                </arguments>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
 
-            </plugins>
-        </pluginManagement>
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>3.2.0</version>
+        </plugin>
 
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M7</version>
-            </plugin>
-        </plugins>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.11.0</version>
+        </plugin>
 
-    </build>
+        <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>3.1.0</version>
+        </plugin>
 
-    <modules>
-        <module>JDKroot</module>
-        <module>JDK8</module>
-        <module>JDK11</module>
-        <module>JDK17</module>
-    </modules>
+        <plugin>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.3.0</version>
+        </plugin>
+
+        <plugin>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>3.2.1</version>
+        </plugin>
+
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.0.0-M9</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-toolchains-plugin</artifactId>
+          <version>3.1.0</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+      </plugin>
+    </plugins>
+
+  </build>
+
+  <modules>
+    <module>JDKroot</module>
+    <module>JDK8</module>
+    <module>JDK11</module>
+    <module>JDK17</module>
+  </modules>
 
 </project>

@@ -1,13 +1,13 @@
 image: maven:3.8.6-eclipse-temurin-17-focal
 
 stages:
-  - build
+- build
 
 maven-build:
   stage: build
   script:
-    # Install the 3 needed LTS JDKs that can be used by toolchains
-    - apt-get update && apt-get install -y ruby openjdk-8-jdk openjdk-11-jdk openjdk-17-jdk
-    - mkdir -p ${HOME}/.m2 && cp toolchains.xml ${HOME}/.m2/
-    # And build it.
-    - mvn clean verify
+  # Install the 3 needed LTS JDKs that can be used by toolchains
+  - apt-get update && apt-get install -y ruby openjdk-8-jdk openjdk-11-jdk openjdk-17-jdk
+  - mkdir -p ${HOME}/.m2 && cp toolchains.xml ${HOME}/.m2/
+  # And build it.
+  - mvn clean verify
