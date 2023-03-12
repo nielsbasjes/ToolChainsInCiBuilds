@@ -13,102 +13,24 @@ jobs:
 
     steps:
     - name: Checkout sourcecode
-      uses: actions/checkout@v3
+      uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
 
     - name: Cache Local Maven Repository
-      uses: actions/cache@v3
+      uses: actions/cache@69d9d449aced6a2ede0bc19182fadc3a0a42d2b0 # v3.2.6
       with:
         path: ~/.m2/repository
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven-
 
-    - name: Setup Java 8 (1/2)
-      uses: actions/setup-java@v3
+    - name: 'Setup: Install JDK 8, 11 & 17'
+      uses: actions/setup-java@3f07048e3d294f56e9b90ac5ea2c6f74e9ad0f98 # v3.10.0
       with:
         distribution: 'adopt'
-        java-version: 8
-    - name: Setup Java 8 (2/2)
-      run: echo "JAVA_8=$JAVA_HOME" >> $GITHUB_ENV
-
-    - name: Setup Java 17 (1/2)
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'adopt'
-        java-version: 17
-    - name: Setup Java 17 (2/2)
-      run: echo "JAVA_17=$JAVA_HOME" >> $GITHUB_ENV
-
-    # The LAST Java in the list becomes the default (because each overwrites the settings)!
-    - name: Setup Java 11 (1/2)
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'adopt'
-        java-version: 11
-    - name: Setup Java 11 (2/2)
-      run: echo "JAVA_11=$JAVA_HOME" >> $GITHUB_ENV
-
-    - name: Create toolchains.xml
-      shell: bash
-      run: |
-        mkdir -p $HOME/.m2 \
-        && cat << EOF > $HOME/.m2/toolchains.xml
-        <?xml version="1.0" encoding="UTF8"?>
-        <toolchains>
-            <toolchain>
-                <type>jdk</type>
-                <provides>
-                    <version>8</version>
-                </provides>
-                <configuration>
-                    <jdkHome>${{ env.JAVA_8 }}</jdkHome>
-                </configuration>
-            </toolchain>
-            <toolchain>
-                <type>jdk</type>
-                <provides>
-                    <version>11</version>
-                </provides>
-                <configuration>
-                    <jdkHome>${{ env.JAVA_11 }}</jdkHome>
-                </configuration>
-            </toolchain>
-            <toolchain>
-                <type>jdk</type>
-                <provides>
-                    <version>17</version>
-                </provides>
-                <configuration>
-                    <jdkHome>${{ env.JAVA_17 }}</jdkHome>
-                </configuration>
-            </toolchain>
-        </toolchains>
-        EOF
-
-    - name: Verify setup
-      shell: bash
-      run: |
-        echo "Showing currently installed Java versions:";\
-        echo "======================================";\
-        echo "Default Java"; \
-        java -version ; \
-        javac -version ; \
-        echo JAVA_HOME=${JAVA_HOME} ; \
-        echo "======================================";\
-        echo "Java 8"; \
-        ${{ env.JAVA_8 }}/bin/java -version ; \
-        ${{ env.JAVA_8 }}/bin/javac -version ; \
-        echo "======================================";\
-        echo "Java 11"; \
-        ${{ env.JAVA_11 }}/bin/java -version ; \
-        ${{ env.JAVA_11 }}/bin/javac -version ; \
-        echo "======================================";\
-        echo "Java 17"; \
-        ${{ env.JAVA_17 }}/bin/java -version ; \
-        ${{ env.JAVA_17 }}/bin/javac -version ; \
-        echo "======================================";\
-        cat $HOME/.m2/toolchains.xml; \
-        echo "======================================";
+        java-version: |
+          8
+          11
+          17
 
     - name: Build the project
       run: mvn clean verify
