@@ -15,6 +15,14 @@
 
   <artifactId>toolchaintester-multi-jdk</artifactId>
 
+  <dependencies>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>2.0.5</version>
+    </dependency>
+  </dependencies>
+
   <build>
     <plugins>
       <plugin>
@@ -22,6 +30,63 @@
         <artifactId>exec-maven-plugin</artifactId>
       </plugin>
 
+      <!-- ============================================================= -->
+
+      <!-- Compile the specific JDK set of classes -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <executions>
+
+          <execution>
+            <id>java-11</id>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+            <configuration>
+              <source>11</source>
+              <target>11</target>
+              <release>11</release>
+              <compileSourceRoots>${project.basedir}/src/main/java11</compileSourceRoots>
+              <multiReleaseOutput>true</multiReleaseOutput>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>java-17</id>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+            <configuration>
+              <source>17</source>
+              <target>17</target>
+              <release>17</release>
+              <compileSourceRoots>${project.basedir}/src/main/java17</compileSourceRoots>
+              <multiReleaseOutput>true</multiReleaseOutput>
+            </configuration>
+          </execution>
+
+        </executions>
+      </plugin>
+
+      <!-- ============================================================= -->
+
+      <!-- Mark the jar as Multi-Release -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Multi-Release>true</Multi-Release>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+
+      <!-- ============================================================= -->
+
+      <!-- Run the same tests on the same JAR under different JDK versions -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-invoker-plugin</artifactId>
@@ -36,59 +101,70 @@
           <postBuildHookScript>verify</postBuildHookScript>
           <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
           <settingsFile>./src/it/settings.xml</settingsFile>
-          <goals>
-            <goal>clean</goal>
-            <goal>test</goal>
-            <goal>install</goal>
-          </goals>
-          <properties>
-            <useJDK>8</useJDK>
-          </properties>
         </configuration>
         <executions>
+          <!--
+            In this example the 3 JDK variant tests run using the same local repo.
+            This means these cannot be run in parallel.
+          -->
           <execution>
-            <id>integration-test-8</id>
+            <id>Populate the local repo for integration tests</id>
             <goals>
-              <goal>integration-test</goal>
-              <goal>verify</goal>
+              <goal>install</goal>
+            </goals>
+          </execution>
+
+          <execution>
+            <id>Integration tests under Java 8</id>
+            <goals>
+              <goal>run</goal>
             </goals>
             <configuration>
               <properties>
                 <useJDK>8</useJDK>
               </properties>
+              <!--
+                Each JDK test is run in a separate directory to keep the build.log for each version.
+              -->
               <cloneProjectsTo>${project.build.directory}/it-jdk-8</cloneProjectsTo>
             </configuration>
           </execution>
 
           <execution>
-            <id>integration-test-11</id>
+            <id>Integration tests under Java 11</id>
             <goals>
-              <goal>integration-test</goal>
-              <goal>verify</goal>
+              <goal>run</goal>
             </goals>
             <configuration>
               <properties>
                 <useJDK>11</useJDK>
               </properties>
+              <!--
+                Each JDK test is run in a separate directory to keep the build.log for each version.
+              -->
               <cloneProjectsTo>${project.build.directory}/it-jdk-11</cloneProjectsTo>
             </configuration>
           </execution>
 
           <execution>
-            <id>integration-test-17</id>
+            <id>Integration tests under Java 17</id>
             <goals>
-              <goal>integration-test</goal>
-              <goal>verify</goal>
+              <goal>run</goal>
             </goals>
             <configuration>
               <properties>
                 <useJDK>17</useJDK>
               </properties>
+              <!--
+                Each JDK test is run in a separate directory to keep the build.log for each version.
+              -->
               <cloneProjectsTo>${project.build.directory}/it-jdk-17</cloneProjectsTo>
             </configuration>
           </execution>
         </executions>
       </plugin>
+
+      <!-- ============================================================= -->
 
     </plugins>
   </build>

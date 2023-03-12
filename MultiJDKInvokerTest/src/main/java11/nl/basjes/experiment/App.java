@@ -4,9 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class App {
-    private static final Logger LOG = LoggerFactory.getLogger("App (base version)");
+    private static final Logger LOG = LoggerFactory.getLogger("App (java 11 version)");
     public String doSomething() {
-        LOG.info("Doing the base version");
+        LOG.info("Doing the java 11 version");
         return "Hello";
     }
 }
