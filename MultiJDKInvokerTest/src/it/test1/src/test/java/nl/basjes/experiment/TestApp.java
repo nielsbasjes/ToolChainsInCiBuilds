@@ -12,8 +12,9 @@ class TestApp {
     }
 
     @Test
-    void showVersion() {
-        System.out.println("Java version during testing: " + System.getProperty("java.version"));
+    void testVersion() {
+        System.out.println("Java version during testing (code = "+Version.getCodeVersion()+"): " + Version.getJavaVersion());
+        assertEquals(System.getProperty("buildWithJDK"), Version.getJavaMajorVersion(), "Wrong major Java version was used");
     }
 
 }

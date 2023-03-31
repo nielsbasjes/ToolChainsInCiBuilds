@@ -13,7 +13,7 @@ class TestApp {
 
     @Test
     void showVersion() {
-        System.out.println("Java version during testing: " + System.getProperty("java.version"));
+        System.out.println("Java version during testing (code = "+Version.getCodeVersion()+"): " + Version.getJavaVersion());
     }
 
 }

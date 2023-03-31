@@ -31,6 +31,24 @@
       </plugin>
 
       <!-- ============================================================= -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-toolchains-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>toolchain</goal>
+            </goals>
+            <configuration>
+              <toolchains>
+                <jdk>
+                  <version>17</version>
+                </jdk>
+              </toolchains>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
 
       <!-- Compile the specific JDK set of classes -->
       <plugin>
@@ -86,88 +104,140 @@
 
       <!-- ============================================================= -->
 
-      <!-- Run the same tests on the same JAR under different JDK versions -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-invoker-plugin</artifactId>
-        <version>3.5.0</version>
-        <configuration>
-          <failIfNoProjects>true</failIfNoProjects>
-          <debug>true</debug>
-          <streamLogsOnFailures>true</streamLogsOnFailures>
-          <pomIncludes>
-            <pomInclude>*/pom.xml</pomInclude>
-          </pomIncludes>
-          <postBuildHookScript>verify</postBuildHookScript>
-          <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
-          <settingsFile>./src/it/settings.xml</settingsFile>
-        </configuration>
-        <executions>
-          <!--
-            In this example the 3 JDK variant tests run using the same local repo.
-            This means these cannot be run in parallel.
-          -->
-          <execution>
-            <id>Populate the local repo for integration tests</id>
-            <goals>
-              <goal>install</goal>
-            </goals>
-          </execution>
-
-          <execution>
-            <id>Integration tests under Java 8</id>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <properties>
-                <useJDK>8</useJDK>
-              </properties>
-              <!--
-                Each JDK test is run in a separate directory to keep the build.log for each version.
-              -->
-              <cloneProjectsTo>${project.build.directory}/it-jdk-8</cloneProjectsTo>
-            </configuration>
-          </execution>
-
-          <execution>
-            <id>Integration tests under Java 11</id>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <properties>
-                <useJDK>11</useJDK>
-              </properties>
-              <!--
-                Each JDK test is run in a separate directory to keep the build.log for each version.
-              -->
-              <cloneProjectsTo>${project.build.directory}/it-jdk-11</cloneProjectsTo>
-            </configuration>
-          </execution>
-
-          <execution>
-            <id>Integration tests under Java 17</id>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <properties>
-                <useJDK>17</useJDK>
-              </properties>
-              <!--
-                Each JDK test is run in a separate directory to keep the build.log for each version.
-              -->
-              <cloneProjectsTo>${project.build.directory}/it-jdk-17</cloneProjectsTo>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <!-- ============================================================= -->
-
     </plugins>
+
+    <pluginManagement>
+      <plugins>
+        <!-- Run the same tests on the same JAR under different JDK versions -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-invoker-plugin</artifactId>
+          <version>3.5.0</version>
+          <configuration>
+            <failIfNoProjects>true</failIfNoProjects>
+            <debug>true</debug>
+            <streamLogsOnFailures>true</streamLogsOnFailures>
+            <pomIncludes>
+              <pomInclude>*/pom.xml</pomInclude>
+            </pomIncludes>
+            <postBuildHookScript>verify</postBuildHookScript>
+            <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+            <settingsFile>./src/it/settings.xml</settingsFile>
+          </configuration>
+          <executions>
+            <!--
+              In this example the 3 JDK variant tests run using the same local repo.
+              This means these cannot be run in parallel.
+            -->
+            <execution>
+              <id>Populate the local repo for integration tests</id>
+              <goals>
+                <goal>install</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
+
+
+  <profiles>
+
+    <profile>
+      <id>run-its-8</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-invoker-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>Integration tests under Java 8</id>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <properties>
+                    <buildWithJDK>8</buildWithJDK>
+                    <maven.compiler.target>8</maven.compiler.target>
+                  </properties>
+                  <cloneProjectsTo>${project.build.directory}/it-jdk-8</cloneProjectsTo>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+
+    <profile>
+      <id>run-its-11</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-invoker-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>Integration tests under Java 11</id>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <properties>
+                    <buildWithJDK>11</buildWithJDK>
+                    <maven.compiler.release>11</maven.compiler.release>
+                  </properties>
+                  <cloneProjectsTo>${project.build.directory}/it-jdk-11</cloneProjectsTo>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+
+    <profile>
+      <id>run-its-17</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-invoker-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>Integration tests under Java 17</id>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <properties>
+                    <buildWithJDK>17</buildWithJDK>
+                    <maven.compiler.release>17</maven.compiler.release>
+                  </properties>
+                  <cloneProjectsTo>${project.build.directory}/it-jdk-17</cloneProjectsTo>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+
+  </profiles>
 
 
 </project>

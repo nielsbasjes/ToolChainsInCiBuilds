@@ -13,7 +13,6 @@
     <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>8</maven.compiler.source>
-    <maven.compiler.target>${useJDK}</maven.compiler.target>
   </properties>
 
   <dependencies>
@@ -121,7 +120,7 @@
         <configuration>
           <toolchains>
             <jdk>
-              <version>${useJDK}</version>
+              <version>@buildWithJDK@</version>
             </jdk>
           </toolchains>
         </configuration>
