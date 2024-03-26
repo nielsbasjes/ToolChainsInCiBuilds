@@ -26,7 +26,7 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.9.2</version>
+      <version>5.10.1</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -119,6 +119,7 @@
     <module>JDK8</module>
     <module>JDK11</module>
     <module>JDK17</module>
+    <module>JDK21</module>
     <module>MultiJDKInvokerTest</module>
   </modules>
 
