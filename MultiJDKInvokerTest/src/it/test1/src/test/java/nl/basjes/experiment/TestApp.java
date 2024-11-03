@@ -34,6 +34,7 @@ class TestApp {
         System.out.println("Java version during testing (code = "+Version.getCodeVersion()+"): " + Version.getJavaVersion());
         String integrationTestingJDK= System.getProperty("integrationTestingJDK");
         assertNotNull(integrationTestingJDK, "Property integrationTestingJDK was not set");
+        System.out.println("Property integrationTestingJDK  = "+integrationTestingJDK);
         assertEquals(integrationTestingJDK, Version.getJavaMajorVersion(), "Wrong major Java version was used");
     }
 
