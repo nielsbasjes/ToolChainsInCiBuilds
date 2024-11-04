@@ -51,7 +51,7 @@
                 <arguments>
                   <argument>-c</argument>
                   <argument>
-                    echo "Version 52 = Java 8, Version 55 = Java 11, Version 61 = Java 17";
+                    echo "Version 52 = Java 8, 55 = Java 11, 61 = Java 17, 65 = Java 21, 66 = Java 22, 67 = Java 23, 68 = Java 24";
                     echo "Code: $(javap -v ./target/classes/nl/basjes/experiment/App.class | fgrep major)" ;
                     echo "Test: $(javap -v ./target/test-classes/nl/basjes/experiment/TestApp.class | fgrep major)";
                   </argument>
@@ -113,17 +113,13 @@
         <executions>
           <execution>
             <goals>
-              <goal>toolchain</goal>
+              <goal>select-jdk-toolchain</goal>
             </goals>
+            <configuration>
+              <version>${integrationTestingJDKRange}</version>
+            </configuration>
           </execution>
         </executions>
-        <configuration>
-          <toolchains>
-            <jdk>
-              <version>${integrationTestingJDK}</version>
-            </jdk>
-          </toolchains>
-        </configuration>
       </plugin>
 
       <plugin>

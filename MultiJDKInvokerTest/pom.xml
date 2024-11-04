@@ -37,14 +37,10 @@
         <executions>
           <execution>
             <goals>
-              <goal>toolchain</goal>
+              <goal>select-jdk-toolchain</goal>
             </goals>
             <configuration>
-              <toolchains>
-                <jdk>
-                  <version>21</version>
-                </jdk>
-              </toolchains>
+              <version>[21,22)</version>
             </configuration>
           </execution>
         </executions>
@@ -188,6 +184,7 @@
                 <configuration>
                   <properties>
                     <integrationTestingJDK>8</integrationTestingJDK>
+                    <integrationTestingJDKRange>[1.8,1.9)</integrationTestingJDKRange>
                   </properties>
                 </configuration>
               </execution>
@@ -216,6 +213,7 @@
                 <configuration>
                   <properties>
                     <integrationTestingJDK>8</integrationTestingJDK>
+                    <integrationTestingJDKRange>[1.8,1.9)</integrationTestingJDKRange>
                     <maven.compiler.target>8</maven.compiler.target>
                   </properties>
                   <projectsDirectory>./src/it-all-jdk</projectsDirectory>
@@ -248,6 +246,7 @@
                 <configuration>
                   <properties>
                     <integrationTestingJDK>11</integrationTestingJDK>
+                    <integrationTestingJDKRange>[11,12)</integrationTestingJDKRange>
                     <maven.compiler.release>11</maven.compiler.release>
                   </properties>
                   <projectsDirectory>./src/it-all-jdk</projectsDirectory>
@@ -280,6 +279,7 @@
                 <configuration>
                   <properties>
                     <integrationTestingJDK>17</integrationTestingJDK>
+                    <integrationTestingJDKRange>[17,18)</integrationTestingJDKRange>
                     <maven.compiler.release>17</maven.compiler.release>
                   </properties>
                   <projectsDirectory>./src/it-all-jdk</projectsDirectory>
@@ -312,6 +312,7 @@
                 <configuration>
                   <properties>
                     <integrationTestingJDK>21</integrationTestingJDK>
+                    <integrationTestingJDKRange>[21,22)</integrationTestingJDKRange>
                     <maven.compiler.release>21</maven.compiler.release>
                   </properties>
                   <projectsDirectory>./src/it-all-jdk</projectsDirectory>
