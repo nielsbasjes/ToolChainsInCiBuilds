@@ -24,7 +24,7 @@
 
     <!-- By putting all of these versions into a property it is easier to keep -->
     <!-- the integration tests up to date.                                     -->
-    <junit.version>5.10.1</junit.version>
+    <junit.version>5.11.3</junit.version>
     <exec-maven-plugin.version>3.5.0</exec-maven-plugin.version>
     <maven-clean-plugin.version>3.4.0</maven-clean-plugin.version>
     <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
